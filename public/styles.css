@@ -367,6 +367,11 @@ th {
   color: #0f5132;
 }
 
+.alert-warning {
+  background: #fff1d1;
+  color: #a46a00;
+}
+
 .alert-error {
   background: #fde1e1;
   color: #9f1239;

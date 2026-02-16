@@ -35,6 +35,12 @@
   </header>
 
   <main class="container">
+    <% if (user && lowStockCount && lowStockCount > 0) { %>
+      <div class="alert alert-warning">
+        มีสินค้าสต๊อกต่ำ <strong><%= lowStockCount %></strong> รายการ
+        <a class="link" href="/alerts">ดูรายการ</a>
+      </div>
+    <% } %>
     <% if (flash) { %>
       <div class="alert alert-<%= flash.type %>"><%= flash.message %></div>
     <% } %>
