@@ -941,9 +941,9 @@ app.get("/export/products.csv", requireLogin, requireSubscription, (req, res) =>
     rows.push(values.join(","));
   });
 
-  res.setHeader("Content-Type", "text/csv");
+  res.setHeader("Content-Type", "text/csv; charset=utf-8");
   res.setHeader("Content-Disposition", "attachment; filename=products.csv");
-  return res.send(rows.join("\n"));
+  return res.send("\uFEFF" + rows.join("\n"));
 });
 
 app.get("/import", requireLogin, requireSubscription, requireRole("admin"), (req, res) => {
