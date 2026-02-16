@@ -216,6 +216,43 @@ const getCurrentStock = (productId, tenantId) => {
   return row ? row.stock : 0;
 };
 
+app.get("/api/customers", requireLogin, requireRole("admin"), (req, res) => {
+  const customers = db
+    .prepare(`
+      SELECT 
+        id, 
+        username, 
+        role,
+        trial_ends,
+        paid_until,
+        plan,
+        created_at
+      FROM users 
+      WHERE role != 'admin'
+      ORDER BY created_at DESC
+    `)
+    .all();
+  
+  return res.json({
+    success: true,
+    count: customers.length,
+    customers: customers.map(c => ({
+      id: c.id,
+      username: c.username,
+      role: c.role,
+      trialEnds: c.trial_ends,
+      paidUntil: c.paid_until,
+      plan: c.plan || 'Trial',
+      createdAt: c.created_at,
+      status: c.paid_until && new Date(c.paid_until) > new Date() 
+        ? 'Paid' 
+        : c.trial_ends && new Date(c.trial_ends) > new Date()
+          ? 'Trial'
+          : 'Expired'
+    }))
+  });
+});
+
 app.get("/", (req, res) => {
   if (req.session.user) {
     return res.redirect("/dashboard");
