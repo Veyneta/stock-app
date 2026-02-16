@@ -482,12 +482,12 @@ th {
 }
 
 .movement-card {
-  padding: 12px 14px;
+  padding: 10px 12px;
   border-radius: 12px;
   background: #f7fbfb;
   border: 1px solid rgba(31, 111, 120, 0.12);
   display: grid;
-  gap: 8px;
+  gap: 6px;
 }
 
 .movement-row {
@@ -495,12 +495,13 @@ th {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  font-size: 0.95rem;
 }
 
 .movement-meta {
   display: grid;
-  gap: 4px;
-  font-size: 0.9rem;
+  gap: 2px;
+  font-size: 0.85rem;
   color: var(--muted);
 }
 
