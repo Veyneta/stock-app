@@ -17,11 +17,9 @@
           <a href="/movements">ประวัติสต๊อก</a>
           <a href="/report">สต๊อกต่ำ</a>
           <a href="/alerts">แจ้งเตือน</a>
-          <a href="/billing">การชำระเงิน</a>
           <% if (user.role === 'admin') { %>
             <a href="/import">นำเข้า</a>
             <a href="/users">ผู้ใช้</a>
-            <a href="/admin/payments">อนุมัติชำระ</a>
           <% } %>
         </nav>
         <form class="logout" action="/logout" method="post">
