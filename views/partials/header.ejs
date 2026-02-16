@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= title %> | SmartWarehouse</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-row">
+      <a class="brand" href="<%= user ? '/dashboard' : '/landing' %>">SmartWarehouse</a>
+      <% if (user) { %>
+        <nav class="nav">
+          <a href="/dashboard">แดชบอร์ด</a>
+          <a href="/products">สินค้า</a>
+          <a href="/movements">ประวัติสต๊อก</a>
+          <a href="/report">สต๊อกต่ำ</a>
+          <a href="/alerts">แจ้งเตือน</a>
+          <a href="/billing">การชำระเงิน</a>
+          <% if (user.role === 'admin') { %>
+            <a href="/import">นำเข้า</a>
+            <a href="/users">ผู้ใช้</a>
+            <a href="/admin/payments">อนุมัติชำระ</a>
+          <% } %>
+        </nav>
+        <form class="logout" action="/logout" method="post">
+          <span class="username">
+            <%= user.username %> (<%= user.role === 'admin' ? 'ผู้ดูแล' : 'พนักงาน' %>)
+          </span>
+          <button type="submit" class="btn btn-ghost">ออกจากระบบ</button>
+        </form>
+      <% } %>
+    </div>
+  </header>
+
+  <main class="container">
+    <% if (flash) { %>
+      <div class="alert alert-<%= flash.type %>"><%= flash.message %></div>
+    <% } %>

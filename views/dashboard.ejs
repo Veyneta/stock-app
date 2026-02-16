@@ -1,0 +1,82 @@
+<%- include('partials/header', { title: title }) %>
+
+<section class="hero fade-up">
+  <div>
+    <span class="pill">คาเฟ่/ร้านอาหาร</span>
+    <h1>ภาพรวมสต๊อกวันนี้</h1>
+    <p class="muted">รู้ทันของขาด ของใกล้หมด และการเคลื่อนไหวใน 7 วันล่าสุด</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/movements/new">ทำรายการสต๊อก</a>
+      <% if (user.role === 'admin') { %>
+        <a class="btn btn-ghost" href="/products/new">เพิ่มสินค้า</a>
+      <% } %>
+    </div>
+  </div>
+  <div class="hero-card fade-up fade-delay-1">
+    <h3>แจ้งเตือนวันนี้</h3>
+    <p class="muted">มีสินค้าสต๊อกต่ำ <strong><%= stats.lowStockCount %></strong> รายการ</p>
+    <a class="btn btn-ghost" href="/alerts">ดูรายการสต๊อกต่ำ</a>
+  </div>
+</section>
+
+<div class="kpi-grid fade-up fade-delay-2">
+  <div class="kpi">
+    <div class="label">จำนวนสินค้า</div>
+    <div class="value"><%= stats.totalProducts %></div>
+  </div>
+  <div class="kpi">
+    <div class="label">สต๊อกต่ำ</div>
+    <div class="value"><%= stats.lowStockCount %></div>
+  </div>
+  <div class="kpi">
+    <div class="label">รายการ 7 วันล่าสุด</div>
+    <div class="value"><%= stats.weeklyMovements %></div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <section class="card fade-up">
+    <h3>สต๊อกต่ำที่ต้องรีบเติม</h3>
+    <div class="list">
+      <% if (stats.lowStockItems.length === 0) { %>
+        <p class="muted">ตอนนี้ไม่มีรายการสต๊อกต่ำ</p>
+      <% } %>
+      <% stats.lowStockItems.forEach((item) => { %>
+        <div class="list-item">
+          <div>
+            <strong><%= item.name %></strong>
+          </div>
+          <div>
+            <span class="badge badge-warning">ต่ำ</span>
+            <div class="muted"><%= item.stock %> / ขั้นต่ำ <%= item.min_qty %></div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </section>
+
+  <section class="card fade-up fade-delay-1">
+    <h3>รายการล่าสุด</h3>
+    <div class="list">
+      <% if (stats.recentMovements.length === 0) { %>
+        <p class="muted">ยังไม่มีรายการเคลื่อนไหว</p>
+      <% } %>
+      <% stats.recentMovements.forEach((movement) => { %>
+        <div class="list-item">
+          <div>
+            <strong><%= movement.product_name %></strong>
+            <div class="muted"><%= new Date(movement.created_at).toLocaleString() %></div>
+          </div>
+          <div>
+            <span class="badge badge-<%= movement.type %>">
+              <%= movement.type === 'in' ? 'รับเข้า' : movement.type === 'out' ? 'จ่ายออก' : 'ปรับยอด' %>
+            </span>
+            <div class="muted"><%= movement.qty %> <%= movement.unit %></div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </section>
+</div>
+
+<%- include('partials/footer') %>

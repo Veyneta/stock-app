@@ -1,0 +1,18 @@
+<%- include('partials/header', { title: title }) %>
+
+<div class="card">
+  <h1>นำเข้าสินค้า</h1>
+  <p class="muted">หัวไฟล์ CSV: name,unit,min_qty</p>
+  <form class="form" method="post" action="/import" enctype="multipart/form-data">
+    <label>
+      ไฟล์ CSV
+      <input type="file" name="file" accept=".csv" required />
+    </label>
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">นำเข้า</button>
+      <a class="btn btn-ghost" href="/products">ยกเลิก</a>
+    </div>
+  </form>
+</div>
+
+<%- include('partials/footer') %>

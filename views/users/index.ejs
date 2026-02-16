@@ -1,0 +1,39 @@
+<%- include('../partials/header', { title: title }) %>
+
+<div class="page-header">
+  <div>
+    <h1>ผู้ใช้</h1>
+    <p class="muted">ผู้ดูแลระบบสามารถเพิ่มบัญชีพนักงานได้</p>
+  </div>
+  <div class="actions">
+    <a class="btn btn-primary" href="/users/new">เพิ่มผู้ใช้</a>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>ชื่อผู้ใช้</th>
+        <th>สิทธิ์</th>
+        <th>วันที่สร้าง</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (users.length === 0) { %>
+        <tr>
+          <td colspan="3" class="muted">ไม่พบผู้ใช้</td>
+        </tr>
+      <% } %>
+      <% users.forEach((userItem) => { %>
+        <tr>
+          <td><%= userItem.username %></td>
+          <td><%= userItem.role === 'admin' ? 'ผู้ดูแลระบบ' : 'พนักงาน' %></td>
+          <td><%= new Date(userItem.created_at).toLocaleDateString() %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

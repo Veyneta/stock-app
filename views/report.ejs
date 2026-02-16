@@ -1,0 +1,40 @@
+<%- include('partials/header', { title: title }) %>
+
+<div class="page-header">
+  <div>
+    <h1>รายงานสต๊อกต่ำ</h1>
+    <p class="muted">รายการที่คงเหลือน้อยกว่าหรือเท่ากับขั้นต่ำ</p>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>ชื่อ</th>
+        <th>หน่วย</th>
+        <th>คงเหลือ</th>
+        <th>ขั้นต่ำ</th>
+        <th>สถานะ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (products.length === 0) { %>
+        <tr>
+          <td colspan="5" class="muted">ไม่พบสินค้าในสต๊อกต่ำ</td>
+        </tr>
+      <% } %>
+      <% products.forEach((product) => { %>
+        <tr>
+          <td><%= product.name %></td>
+          <td><%= product.unit %></td>
+          <td><%= product.stock %></td>
+          <td><%= product.min_qty %></td>
+          <td><span class="badge badge-warning">ต่ำ</span></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('partials/footer') %>

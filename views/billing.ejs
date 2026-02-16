@@ -1,0 +1,127 @@
+<%- include('partials/header', { title: title }) %>
+
+<div class="page-header">
+  <div>
+    <h1>การชำระเงิน</h1>
+    <p class="muted">ทดลองใช้งาน 14 วัน หากครบกำหนดระบบจะล็อกการใช้งาน</p>
+  </div>
+</div>
+
+<div class="grid-2">
+  <section class="card">
+    <h3>แพ็กเกจปัจจุบัน</h3>
+    <p class="muted">แพ็กเกจ: <strong><%= plan.name %></strong></p>
+    <p class="muted">ราคา: <strong>฿<%= plan.price %>/เดือน</strong></p>
+    <p class="muted">สถานะ: 
+      <% if (!subscription) { %>
+        <span class="badge badge-rejected">ยังไม่เริ่ม</span>
+      <% } else if (subscription.status === 'pending') { %>
+        <span class="badge badge-pending">รอตรวจสอบ</span>
+      <% } else if (subscription.status === 'active') { %>
+        <span class="badge badge-approved">ใช้งานได้</span>
+      <% } else if (subscription.status === 'trialing') { %>
+        <span class="badge badge-in">ทดลองใช้งาน</span>
+      <% } else { %>
+        <span class="badge badge-rejected">หมดอายุ</span>
+      <% } %>
+    </p>
+    <p class="muted">ทดลองใช้งานเหลือ: <strong><%= trialDaysLeft %></strong> วัน</p>
+    <p class="muted">ชำระแล้วถึง: <strong><%= paidUntil %></strong></p>
+  </section>
+
+  <section class="card">
+    <h3>ชำระเงินแบบโอน</h3>
+    <p class="muted">PromptPay: 0XX-XXX-XXXX (ใส่เลขบัญชีจริงที่ต้องการ)</p>
+    <form class="form" method="post" action="/billing/pay" enctype="multipart/form-data">
+      <label>
+        เลขอ้างอิงการโอน
+        <input type="text" name="reference" placeholder="เช่น 20260215-001" />
+      </label>
+      <label>
+        อัปโหลดสลิป
+        <input type="file" name="slip" accept=".jpg,.jpeg,.png,.pdf" />
+      </label>
+      <button class="btn btn-primary" type="submit">ส่งข้อมูลชำระเงิน</button>
+    </form>
+  </section>
+</div>
+
+<section class="card" style="margin-top: 20px;">
+  <h3>ข้อมูลใบกำกับภาษี</h3>
+  <form class="form" method="post" action="/billing/profile">
+    <label>
+      ชื่อกิจการ/บริษัท
+      <input type="text" name="business_name" value="<%= profile ? profile.business_name : '' %>" required />
+    </label>
+    <label>
+      เลขผู้เสียภาษี
+      <input type="text" name="tax_id" value="<%= profile ? profile.tax_id : '' %>" />
+    </label>
+    <label>
+      สาขา
+      <input type="text" name="branch" value="<%= profile ? profile.branch : '' %>" placeholder="สำนักงานใหญ่" />
+    </label>
+    <label>
+      ที่อยู่
+      <input type="text" name="address" value="<%= profile ? profile.address : '' %>" required />
+    </label>
+    <label>
+      อีเมล
+      <input type="email" name="email" value="<%= profile ? profile.email : '' %>" />
+    </label>
+    <label>
+      เบอร์โทร
+      <input type="text" name="phone" value="<%= profile ? profile.phone : '' %>" />
+    </label>
+    <button class="btn btn-primary" type="submit">บันทึกข้อมูลใบกำกับภาษี</button>
+  </form>
+</section>
+
+<section class="card" style="margin-top: 20px;">
+  <h3>รายการชำระเงินล่าสุด</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>วันที่</th>
+          <th>จำนวนเงิน</th>
+          <th>สถานะ</th>
+          <th>อ้างอิง</th>
+          <th>ใบกำกับภาษี</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (payments.length === 0) { %>
+          <tr>
+            <td colspan="5" class="muted">ยังไม่มีรายการชำระเงิน</td>
+          </tr>
+        <% } %>
+        <% payments.forEach((payment) => { %>
+          <tr>
+            <td><%= new Date(payment.created_at).toLocaleDateString() %></td>
+            <td>฿<%= payment.amount %></td>
+            <td>
+              <% if (payment.status === 'approved') { %>
+                <span class="badge badge-approved">อนุมัติแล้ว</span>
+              <% } else if (payment.status === 'rejected') { %>
+                <span class="badge badge-rejected">ปฏิเสธ</span>
+              <% } else { %>
+                <span class="badge badge-pending">รอตรวจสอบ</span>
+              <% } %>
+            </td>
+            <td><%= payment.reference || '-' %></td>
+            <td>
+              <% if (payment.status === 'approved') { %>
+                <a class="link" href="/invoice/<%= payment.id %>">ดู/พิมพ์</a>
+              <% } else { %>
+                -
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

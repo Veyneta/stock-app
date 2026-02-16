@@ -1,0 +1,63 @@
+<%- include('partials/header', { title: title }) %>
+
+<div class="card">
+  <div class="page-header">
+    <div>
+      <h1>ใบกำกับภาษี</h1>
+      <p class="muted">ออกโดยระบบชำระเงิน (ใช้พิมพ์เป็น PDF ได้)</p>
+    </div>
+    <button class="btn btn-ghost print-hidden" onclick="window.print()">พิมพ์เป็น PDF</button>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <h3>ผู้ขาย</h3>
+      <p><strong><%= seller.businessName %></strong></p>
+      <p>เลขผู้เสียภาษี: <%= seller.taxId %></p>
+      <p>สาขา: <%= seller.branch %></p>
+      <p>ที่อยู่: <%= seller.address %></p>
+      <p>อีเมล: <%= seller.email %></p>
+      <p>โทร: <%= seller.phone %></p>
+    </div>
+    <div>
+      <h3>ผู้ซื้อ</h3>
+      <p><strong><%= profile.business_name %></strong></p>
+      <p>เลขผู้เสียภาษี: <%= profile.tax_id || '-' %></p>
+      <p>สาขา: <%= profile.branch || '-' %></p>
+      <p>ที่อยู่: <%= profile.address %></p>
+      <p>อีเมล: <%= profile.email || '-' %></p>
+      <p>โทร: <%= profile.phone || '-' %></p>
+    </div>
+  </div>
+
+  <div class="table-wrap" style="margin-top: 16px;">
+    <table>
+      <thead>
+        <tr>
+          <th>รายการ</th>
+          <th>งวด</th>
+          <th>จำนวน</th>
+          <th>ราคา</th>
+          <th>รวม</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ค่าบริการแพ็กเกจ <%= plan.name %></td>
+          <td>รายเดือน</td>
+          <td>1</td>
+          <td>฿<%= plan.price %></td>
+          <td>฿<%= plan.price %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top: 16px;">
+    <p>เลขที่อ้างอิง: <strong><%= payment.reference || payment.id %></strong></p>
+    <p>วันที่ชำระ: <strong><%= new Date(payment.created_at).toLocaleDateString() %></strong></p>
+    <p>สถานะ: <strong>ชำระแล้ว</strong></p>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

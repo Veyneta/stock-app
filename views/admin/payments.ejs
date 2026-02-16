@@ -1,0 +1,69 @@
+<%- include('../partials/header', { title: title }) %>
+
+<div class="page-header">
+  <div>
+    <h1>อนุมัติการชำระเงิน</h1>
+    <p class="muted">ตรวจสอบสลิปและยืนยันการชำระ</p>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>ผู้ใช้</th>
+        <th>วันที่</th>
+        <th>จำนวนเงิน</th>
+        <th>อ้างอิง</th>
+        <th>สลิป</th>
+        <th>สถานะ</th>
+        <th>การทำงาน</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (payments.length === 0) { %>
+        <tr>
+          <td colspan="7" class="muted">ไม่มีรายการ</td>
+        </tr>
+      <% } %>
+      <% payments.forEach((payment) => { %>
+        <tr>
+          <td><%= payment.username %></td>
+          <td><%= new Date(payment.created_at).toLocaleString() %></td>
+          <td>฿<%= payment.amount %></td>
+          <td><%= payment.reference || '-' %></td>
+          <td>
+            <% if (payment.slip_path) { %>
+              <a class="link" href="/admin/payments/<%= payment.id %>/slip" target="_blank">ดูสลิป</a>
+            <% } else { %>
+              -
+            <% } %>
+          </td>
+          <td>
+            <% if (payment.status === 'approved') { %>
+              <span class="badge badge-approved">อนุมัติแล้ว</span>
+            <% } else if (payment.status === 'rejected') { %>
+              <span class="badge badge-rejected">ปฏิเสธ</span>
+            <% } else { %>
+              <span class="badge badge-pending">รอตรวจสอบ</span>
+            <% } %>
+          </td>
+          <td class="table-actions">
+            <% if (payment.status === 'pending') { %>
+              <form class="inline-form" method="post" action="/admin/payments/<%= payment.id %>/approve">
+                <button class="link" type="submit">อนุมัติ</button>
+              </form>
+              <form class="inline-form" method="post" action="/admin/payments/<%= payment.id %>/reject">
+                <button class="link danger" type="submit">ปฏิเสธ</button>
+              </form>
+            <% } else { %>
+              -
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

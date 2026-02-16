@@ -1,0 +1,24 @@
+<%- include('partials/header', { title: title }) %>
+
+<div class="card narrow">
+  <h1>สมัครสมาชิก</h1>
+  <form action="/register" method="post" class="form">
+    <label>
+      ชื่อผู้ใช้
+      <input type="text" name="username" required />
+    </label>
+    <label>
+      รหัสผ่าน
+      <input type="password" name="password" required />
+    </label>
+    <label>
+      ยืนยันรหัสผ่าน
+      <input type="password" name="confirm_password" required />
+    </label>
+    <button type="submit" class="btn btn-primary">สมัครสมาชิก</button>
+  </form>
+  <p class="muted">สมัครฟรี ใช้งานได้ทันที</p>
+  <p class="muted">มีบัญชีอยู่แล้ว? <a class="link" href="/login">เข้าสู่ระบบ</a></p>
+</div>
+
+<%- include('partials/footer') %>

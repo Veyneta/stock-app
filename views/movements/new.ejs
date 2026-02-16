@@ -1,0 +1,41 @@
+<%- include('../partials/header', { title: title }) %>
+
+<div class="card">
+  <h1>ทำรายการสต๊อก</h1>
+  <form class="form" method="post" action="/movements/new">
+    <label>
+      สินค้า
+      <select id="product-select" name="product_id" required>
+        <option value="">เลือกสินค้า</option>
+        <% products.forEach((product) => { %>
+          <option value="<%= product.id %>" <%= String(product.id) === String(selectedProductId) ? 'selected' : '' %> >
+            <%= product.name %>
+          </option>
+        <% }) %>
+      </select>
+    </label>
+    <label>
+      ประเภท
+      <select name="type" required>
+        <option value="in">รับเข้า</option>
+        <option value="out">เบิกมาใช้</option>
+        <option value="adjust">ปรับยอดเป็นยอดใหม่</option>
+      </select>
+    </label>
+    <label>
+      จำนวน
+      <input type="number" name="qty" step="0.01" required />
+    </label>
+    <label>
+      หมายเหตุ
+      <input type="text" name="note" />
+    </label>
+    <p class="muted">กรณีปรับยอด ให้ใส่ยอดคงเหลือใหม่ ระบบจะคำนวณส่วนต่างให้</p>
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">บันทึกรายการ</button>
+      <a class="btn btn-ghost" href="/movements">ยกเลิก</a>
+    </div>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

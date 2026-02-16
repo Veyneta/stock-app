@@ -1,0 +1,25 @@
+<%- include('../partials/header', { title: title }) %>
+
+<div class="card">
+  <h1><%= product ? 'แก้ไขสินค้า' : 'เพิ่มสินค้า' %></h1>
+  <form class="form" method="post" action="<%= product ? '/products/' + product.id + '/edit' : '/products/new' %>">
+    <label>
+      ชื่อสินค้า
+      <input type="text" id="name-input" name="name" value="<%= product ? product.name : '' %>" required />
+    </label>
+    <label>
+      หน่วย
+      <input type="text" id="unit-input" name="unit" value="<%= product ? product.unit : '' %>" required />
+    </label>
+    <label>
+      สต๊อกขั้นต่ำ
+      <input type="number" name="min_qty" step="0.01" value="<%= product ? product.min_qty : 0 %>" />
+    </label>
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">บันทึก</button>
+      <a class="btn btn-ghost" href="/products">ยกเลิก</a>
+    </div>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

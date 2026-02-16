@@ -1,0 +1,41 @@
+<%- include('partials/header', { title: title }) %>
+
+<div class="page-header">
+  <div>
+    <h1>แจ้งเตือนสต๊อกต่ำ</h1>
+    <p class="muted">รายการที่ควรเติมสต๊อกก่อนของขาด</p>
+  </div>
+  <div class="actions">
+    <a class="btn btn-primary" href="/report">ดูรายงาน</a>
+    <a class="btn btn-ghost" href="/products?low=1">ไปหน้าสินค้า</a>
+  </div>
+</div>
+
+<div class="card">
+  <% if (products.length === 0) { %>
+    <p class="muted">ตอนนี้ยังไม่มีสินค้าที่สต๊อกต่ำ</p>
+  <% } %>
+  <div class="list">
+    <% products.forEach((item) => { %>
+      <div class="list-item">
+        <div>
+          <strong><%= item.name %></strong>
+          <div class="muted">หน่วย: <%= item.unit %></div>
+        </div>
+        <div>
+          <span class="badge badge-warning">ต่ำ</span>
+          <div class="muted">คงเหลือ <%= item.stock %> (ขั้นต่ำ <%= item.min_qty %>)</div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+<div class="cta-band">
+  <div class="hero-actions">
+    <a class="btn btn-primary" href="/movements/new">ทำรายการรับเข้า</a>
+    <a class="btn btn-ghost" href="/export/products.csv">ส่งออกรายการสต๊อก</a>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
