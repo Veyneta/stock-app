@@ -3,6 +3,7 @@ const path = require("path");
 const https = require("https");
 const express = require("express");
 const session = require("express-session");
+const SqliteStore = require("better-sqlite3-session-store")(session);
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const { parse } = require("csv-parse/sync");
@@ -11,7 +12,12 @@ const db = require("./db");
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 
-const slipsDir = path.join(__dirname, "data", "slips");
+const dataDir = process.env.DATA_DIR || path.join(__dirname, "data");
+if (!fs.existsSync(dataDir)) {
+  fs.mkdirSync(dataDir, { recursive: true });
+}
+
+const slipsDir = path.join(dataDir, "slips");
 if (!fs.existsSync(slipsDir)) {
   fs.mkdirSync(slipsDir, { recursive: true });
 }
@@ -43,6 +49,37 @@ const SELLER = {
   phone: "0838025612"
 };
 
+const getLowStockCount = (tenantId) => {
+  return db
+    .prepare(
+      `
+        SELECT COUNT(*) AS count
+        FROM (
+          SELECT
+            p.id,
+            p.min_qty,
+            COALESCE(
+              SUM(
+                CASE
+                  WHEN m.type = 'in' THEN m.qty
+                  WHEN m.type = 'out' THEN -m.qty
+                  WHEN m.type = 'adjust' THEN m.qty
+                  ELSE 0
+                END
+              ),
+              0
+            ) AS stock
+          FROM products p
+          LEFT JOIN stock_movements m ON m.product_id = p.id AND m.tenant_id = ?
+          WHERE p.tenant_id = ?
+          GROUP BY p.id
+          HAVING stock <= p.min_qty
+        )
+      `
+    )
+    .get(tenantId, tenantId).count;
+};
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
@@ -50,6 +87,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
+    store: new SqliteStore({
+      client: db,
+      expired: {
+        clear: true,
+        intervalMs: 24 * 60 * 60 * 1000
+      }
+    }),
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false
@@ -60,10 +104,13 @@ app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   res.locals.flash = req.session.flash || null;
   res.locals.subscription = null;
+  res.locals.lowStockCount = 0;
   if (req.session.user) {
     res.locals.subscription = db
       .prepare("SELECT * FROM subscriptions WHERE user_id = ?")
       .get(req.session.user.id);
+    const tenantId = req.session.user.tenant_id || req.session.user.id;
+    res.locals.lowStockCount = getLowStockCount(tenantId);
   }
   delete req.session.flash;
   next();
