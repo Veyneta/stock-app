@@ -33,14 +33,14 @@ const PLAN = {
   price: 399,
   periodDays: 30
 };
-const FREE_MODE = true;
+const FREE_MODE = false;
 const SELLER = {
-  businessName: "Cafe Stock Co., Ltd.",
+  businessName: "SmartWarehouse",
   taxId: "-",
   branch: "สำนักงานใหญ่",
   address: "-",
-  email: "support@example.com",
-  phone: "-"
+  email: "putggaw@gmail.com",
+  phone: "0838025612"
 };
 
 app.set("view engine", "ejs");
