@@ -10,7 +10,7 @@
   </div>
 </div>
 
-<div class="table-wrap">
+<div class="table-wrap desktop-only">
   <table>
     <thead>
       <tr>
@@ -44,6 +44,32 @@
       <% }) %>
     </tbody>
   </table>
+</div>
+
+<div class="card mobile-only">
+  <% if (movements.length === 0) { %>
+    <p class="muted">ยังไม่มีรายการ</p>
+  <% } %>
+  <div class="list">
+    <% movements.forEach((movement) => { %>
+      <div class="movement-card">
+        <div class="movement-row">
+          <strong><%= movement.product_name %></strong>
+          <span class="badge badge-<%= movement.type %>">
+            <%= movement.type === 'in' ? 'รับเข้า' : movement.type === 'out' ? 'เบิกมาใช้' : 'ปรับยอด' %>
+          </span>
+        </div>
+        <div class="movement-row muted">
+          <span><%= new Date(movement.created_at).toLocaleString() %></span>
+          <span><%= movement.qty %></span>
+        </div>
+        <div class="movement-meta">
+          <span>โดย: <%= movement.created_by_name %></span>
+          <span>หมายเหตุ: <%= movement.note || '-' %></span>
+        </div>
+      </div>
+    <% }) %>
+  </div>
 </div>
 
 <%- include('../partials/footer') %>

@@ -473,6 +473,37 @@ th {
   border: 1px solid rgba(31, 111, 120, 0.12);
 }
 
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+.movement-card {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f7fbfb;
+  border: 1px solid rgba(31, 111, 120, 0.12);
+  display: grid;
+  gap: 8px;
+}
+
+.movement-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.movement-meta {
+  display: grid;
+  gap: 4px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
 .pill {
   display: inline-flex;
   align-items: center;
@@ -706,33 +737,12 @@ h2 {
     gap: 14px;
   }
 
-  .table-wrap {
-    position: relative;
+  .desktop-only {
+    display: none;
   }
 
-  .table-wrap::after {
-    content: '← เลื่อนดูเพิ่มเติม →';
-    position: sticky;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(31, 111, 120, 0.08) 20%);
-    padding: 8px 12px;
-    font-size: 0.8rem;
-    color: var(--accent-strong);
-    text-align: center;
+  .mobile-only {
     display: block;
-    pointer-events: none;
-    border-radius: 0 0 16px 0;
-  }
-
-  table {
-    min-width: 600px;
-    font-size: 0.9rem;
-  }
-
-  th,
-  td {
-    padding: 10px 8px;
   }
 
   .table-actions {
@@ -791,15 +801,6 @@ h2 {
   select {
     padding: 9px 10px;
     font-size: 0.95rem;
-  }
-
-  table {
-    font-size: 0.85rem;
-  }
-
-  th,
-  td {
-    padding: 8px 6px;
   }
 
   .badge {
