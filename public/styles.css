@@ -505,6 +505,22 @@ th {
   color: var(--muted);
 }
 
+.product-card {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #f7fbfb;
+  border: 1px solid rgba(31, 111, 120, 0.12);
+  display: grid;
+  gap: 8px;
+}
+
+.product-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+}
+
 .pill {
   display: inline-flex;
   align-items: center;
@@ -744,6 +760,19 @@ h2 {
 
   .mobile-only {
     display: block;
+  }
+
+  .list-item.stacked {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .list-item.stacked > div {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
   }
 
   .table-actions {

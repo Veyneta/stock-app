@@ -20,7 +20,7 @@
   <button class="btn btn-ghost" type="submit">กรอง</button>
 </form>
 
-<div class="table-wrap">
+<div class="table-wrap desktop-only">
   <table>
     <thead>
       <tr>
@@ -62,6 +62,37 @@
       <% }) %>
     </tbody>
   </table>
+</div>
+
+<div class="card mobile-only">
+  <% if (products.length === 0) { %>
+    <p class="muted">ไม่พบสินค้า</p>
+  <% } %>
+  <div class="list">
+    <% products.forEach((product) => { %>
+      <div class="product-card">
+        <div class="movement-row">
+          <strong><%= product.name %></strong>
+          <% if (product.stock <= product.min_qty) { %>
+            <span class="badge badge-warning">ต่ำ</span>
+          <% } else { %>
+            <span class="badge badge-ok">ปกติ</span>
+          <% } %>
+        </div>
+        <div class="movement-row muted">
+          <span>คงเหลือ <%= product.stock %> <%= product.unit %></span>
+          <span>ขั้นต่ำ <%= product.min_qty %></span>
+        </div>
+        <div class="product-actions">
+          <a class="link" href="/movements/new?productId=<%= product.id %>">ทำรายการ</a>
+          <a class="link" href="/products/<%= product.id %>/edit">แก้ไข</a>
+          <form action="/products/<%= product.id %>/delete" method="post" class="inline-form">
+            <button class="link danger" type="submit" onclick="return confirm('ลบสินค้านี้หรือไม่?');">ลบ</button>
+          </form>
+        </div>
+      </div>
+    <% }) %>
+  </div>
 </div>
 
 <%- include('../partials/footer') %>
