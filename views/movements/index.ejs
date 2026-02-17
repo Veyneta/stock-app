@@ -30,7 +30,7 @@
       <% } %>
       <% movements.forEach((movement) => { %>
         <tr>
-          <td><%= new Date(movement.created_at).toLocaleString() %></td>
+          <td><%= new Date(movement.created_at).toLocaleString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %></td>
           <td><%= movement.product_name %></td>
           <td>
             <span class="badge badge-<%= movement.type %>">
@@ -60,7 +60,7 @@
           </span>
         </div>
         <div class="movement-row muted">
-          <span><%= new Date(movement.created_at).toLocaleString() %></span>
+          <span><%= new Date(movement.created_at).toLocaleString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %></span>
           <span><%= movement.qty %></span>
         </div>
         <div class="movement-meta">

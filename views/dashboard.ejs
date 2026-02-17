@@ -65,7 +65,7 @@
         <div class="list-item">
           <div>
             <strong><%= movement.product_name %></strong>
-            <div class="muted"><%= new Date(movement.created_at).toLocaleString() %></div>
+            <div class="muted"><%= new Date(movement.created_at).toLocaleString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %></div>
           </div>
           <div>
             <span class="badge badge-<%= movement.type %>">
